@@ -1,0 +1,1 @@
+DROP USER 'PedreroGerard_admin'@"localhost";
