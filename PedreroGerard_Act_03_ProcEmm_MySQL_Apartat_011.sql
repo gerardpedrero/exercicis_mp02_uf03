@@ -1,21 +1,19 @@
+  
 USE videoclub;
 DROP FUNCTION IF EXISTS act11;
 
 DELIMITER //
-CREATE FUNCTION act11(peCodiPeli SMALLINT UNSIGNED) 
-       RETURNS SMALLINT UNSIGNED
+CREATE FUNCTION act11(CodiPeli SMALLINT UNSIGNED) 
+       RETURNS Smallint
        DETERMINISTIC
 BEGIN
-   DECLARE QtatExemplars SMALLINT UNSIGNED;
+   DECLARE QuanExem Smallint UNSIGNED;
 
-   SELECT   COUNT(*)
-        INTO QtatExemplars
+   select   COUNT(*)
+        into QuanExem 
    FROM     EXEMPLARS
-   WHERE    id_peli = peCodiPeli;
+   WHERE    id_peli = CodiPeli;
 
-   RETURN QtatExemplars;
+   RETURN QuanExem;
 END//
 DELIMITER ;
-  SELECT  titol_peli Titol, act11(1) "Quantitat exemplars"
-   FROM    PELLICULES
-   WHERE   id_peli = 1;
