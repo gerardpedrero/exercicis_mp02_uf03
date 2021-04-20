@@ -11,7 +11,7 @@ BEGIN
 
    select   COUNT(*)
         into QuanExem 
-   FROM     EXEMPLARS
+   FROM     VISUALITZACIONS
    WHERE    id_peli = CodiPeli;
 
    RETURN QuanExem;
