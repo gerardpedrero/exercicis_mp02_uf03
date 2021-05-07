@@ -148,66 +148,8 @@ Query OK, 0 rows affected (0.01 sec)
 
 **4. Sortida de l'execució del procediment**
 ```sql
-   mysql> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | nom_actor     | anys | anynaix_actor | sexe_actor | Paper que pot interpretar                                                                                         |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | Hayley Atwell |   39 |          1982 | dona       | dona adulta                                                                                                       |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> | nom_actor      | anys | anynaix_actor | sexe_actor | Paper que pot interpretar                                                                                         |
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> | Sebastian Stan |   39 |          1982 | home       | home adult                                                                                                        |
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | nom_actor     | anys | anynaix_actor | sexe_actor | Paper que pot interpretar                                                                                         |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | David Harbour |   46 |          1975 | home       | home madur                                                                                                        |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +--------------+------+---------------+------------+---------------------------+
-    -> | nom_actor    | anys | anynaix_actor | sexe_actor | Paper que pot interpretar |
-    -> +--------------+------+---------------+------------+---------------------------+
-    -> | Keanu Reeves |   57 |          1964 | home       | home madur                |
-    -> +--------------+------+---------------+------------+---------------------------+
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | nom_actor     | anys | anynaix_actor | sexe_actor | Paper que pot interpretar                                                                                         |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> | Ryan Reynolds |   45 |          1976 | home       | home madur                                                                                                        |
-    -> +---------------+------+---------------+------------+---------------------------                                                                                        +
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +-----------------+------+---------------+------------+-------------------------                                                                                        --+
-    -> | nom_actor       | anys | anynaix_actor | sexe_actor | Paper que pot interpreta                                                                                        r |
-    -> +-----------------+------+---------------+------------+-------------------------                                                                                        --+
-    -> | Joaquin Phoenix |   47 |          1974 | home       | home madur                                                                                                        |
-    -> +-----------------+------+---------------+------------+-------------------------                                                                                        --+
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> | nom_actor      | anys | anynaix_actor | sexe_actor | Paper que pot interpretar                                                                                         |
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> | Robert De Niro |   78 |          1943 |  home      | dona gran                                                                                                         |
-    -> +----------------+------+---------------+------------+--------------------------                                                                                        -+
-    -> 1 row in set (0.03 sec)
-    ->
-    -> +-------------+------+---------------+------------+---------------------------+
-    -> | nom_actor   | anys | anynaix_actor | sexe_actor | Paper que pot interpretar |
-    -> +-------------+------+---------------+------------+---------------------------+
-    -> | Zazie Beetz |   30 |          1991 | dona       | dona adulta               |
-    -> +-------------+------+---------------+------------+---------------------------+
-    -> 1 row in set (0.03 sec)
-    ->
-    -> Query OK, 0 rows affected (0.04 sec)
-    ->
     -> mysql> call activitat09();
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+---------------+------+---------------+------------+-------------------------
+
 |' at line 1
 mysql> +--------------+------+---------------+------------+---------------------------+
     -> | nom_actor    | anys | anynaix_actor | sexe_actor | Paper que pot interpretar |
@@ -420,22 +362,27 @@ BEGIN
 END//
 DELIMITER ;
 
- Select titol_peli, act11(1) 
- FROM    PELLICULES
-WHERE   id_peli = 1;
 
-
-
-CREATE TABLE VISUALITZACIONS(
-    id_peli	  SMALLINT NOT NULL,
-    id_soci	 SMALLINT NOT NULL,
-    temps      VARCHAR(8) NOT NULL PRIMARY KEY
 );
 
 ```
 **3. Sortida de la creació del procediment**
 ```sql
-   <La sortida de la creació del vostre procediment>
+   DELIMITER //
+mysql> CREATE FUNCTION act11(CodiPeli SMALLINT UNSIGNED)
+    ->        RETURNS Smallint
+    ->        DETERMINISTIC
+    -> BEGIN
+    ->    DECLARE QuanVis Smallint UNSIGNED;
+    ->
+    ->    select   COUNT(*)
+    ->         into QuanVis
+    ->    FROM     VISUALITZACIONS
+    ->    WHERE    id_peli = CodiPeli;
+    ->
+    ->    RETURN QuanVis;
+    -> END//
+
 ```
 **4. Sortida de l'execució del procediment**
 ```sql
