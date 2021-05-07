@@ -432,11 +432,50 @@ DELIMITER ;
 ```
 **3. Sortida de la creació del procediment**
 ```sql
-   <La sortida de la creació del vostre procediment>
+   CREATE FUNCTION act12(CodiPeli SMALLINT UNSIGNED)
+    ->        RETURNS Smallint
+    ->        DETERMINISTIC
+    -> BEGIN
+    ->    DECLARE IdActor Smallint UNSIGNED;
+    -> DECLARE final int default false;
+    ->
+    -> DECLARE elcursor cursor for
+    ->        SELECT   id_actor
+    ->    FROM     ACTORS_PELLICULES
+    ->    WHERE    id_peli = CodiPeli
+    ->    AND principal = 1;
+    ->
+    ->
+    ->  DECLARE continue handler for not found SET final = 1;
+    ->    open elcursor;
+    ->    elbucle:loop
+    ->       fetch elcursor into IdActor;
+    ->
+    ->       if final = 1 then
+    ->          leave elbucle;
+    ->       end if;
+    ->
+    -> RETURN IdActor;
+    ->    END loop elbucle;
+    ->    close elcursor;
+    ->
+    ->
+    -> END//
+Query OK, 0 rows affected (0.02 sec)
+
 ```
 **4. Sortida de l'execució del procediment**
 ```sql
-   <La sortida de l'execució del vostre procediment>
+   SELECT nom_actor
+    ->    FROM ACTORS
+    ->    WHERE id_actor = act12(1);
++--------------+
+| nom_actor    |
++--------------+
+| Nicolas Cage |
++--------------+
+1 row in set (0.01 sec)
+
 ```
 
 ---
@@ -449,16 +488,71 @@ DELIMITER ;
 
 **2. Contingut del fitxer**
 ```sql
-   <El codi del vostre fitxer>
+   USE videoclub;
+ DROP FUNCTION IF EXISTS act13;  
+ DELIMITER //
+
+  CREATE FUNCTION act13() 
+        RETURNS bigint UNSIGNED  
+              DETERMINISTIC BEGIN 
+                 DECLARE quantitatPrestecs bigint UNSIGNED;  
+
+SELECT  
+ MAX(PELLICULES.recaudacio_peli)     
+     INTO quantitatPrestecs  
+       FROM     PELLICULES;    
+ RETURN quantitatPrestecs;
+  END// 
+  DELIMITER ;  
+  SELECT    PELLICULES.id_peli,  
+    ACTORS_PELLICULES.principal, ACTORS.nom_actor, 
+    act13() "Recaudació" FROM   PELLICULES LEFT JOIN  
+
+ ACTORS_PELLICULES ON
+  PELLICULES.id_peli = ACTORS_PELLICULES.id_peli LEFT JOIN
+   
+ ACTORS ON ACTORS_PELLICULES.id_actor = ACTORS.id_actor WHERE  
+ recaudacio_peli = act13() AND ACTORS_PELLICULES.principal = 1;
 ```
 
 **3. Sortida de la creació del procediment**
 ```sql
-   <La sortida de la creació del vostre procediment>
+    CREATE FUNCTION act13()
+    ->         RETURNS bigint UNSIGNED
+    ->               DETERMINISTIC BEGIN
+    ->                  DECLARE quantitatPrestecs bigint UNSIGNED;
+    ->
+    -> SELECT
+    ->  MAX(PELLICULES.recaudacio_peli)
+    ->      INTO quantitatPrestecs
+    ->        FROM     PELLICULES;
+    ->  RETURN quantitatPrestecs;
+    ->   END//
+Query OK, 0 rows affected (0.01 sec)
 ```
 
 **4. Sortida de l'execució del procediment**
 ```sql
-   <La sortida de l'execució del vostre procediment>
+   SELECT    PELLICULES.id_peli,
+    ->     ACTORS_PELLICULES.principal, ACTORS.nom_actor,
+    ->     act13() "Recaudació" FROM   PELLICULES LEFT JOIN
+    ->
+    ->  ACTORS_PELLICULES ON
+    ->   PELLICULES.id_peli = ACTORS_PELLICULES.id_peli LEFT JOIN
+    ->
+    ->  ACTORS ON ACTORS_PELLICULES.id_actor = ACTORS.id_actor WHERE
+    ->  recaudacio_peli = act13() AND ACTORS_PELLICULES.principal = 1;
++---------+-----------+--------------------+-------------+
+| id_peli | principal | nom_actor          | Recaudació  |
++---------+-----------+--------------------+-------------+
+|       8 |         1 | Robert Downey Jr.  |  1519557910 |
+|       8 |         1 | Chris Hemsworth    |  1519557910 |
+|       8 |         1 | Mark Ruffalo       |  1519557910 |
+|       8 |         1 | Chris Evans        |  1519557910 |
+|       8 |         1 | Scarlett Johansson |  1519557910 |
+|       8 |         1 | Jeremy Renner      |  1519557910 |
++---------+-----------+--------------------+-------------+
+6 rows in set (0.01 sec)
+
 ```
 ---
