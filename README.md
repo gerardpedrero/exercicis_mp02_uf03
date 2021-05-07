@@ -486,6 +486,8 @@ Query OK, 0 rows affected (0.02 sec)
 
 **1. Enllaç al fitxer**
 
+https://github.com/gerardpedrero/exercicis_mp02_uf03/blob/master/PedreroGerard_Act_03_ProcEmm_MySQL_Apartat_13.sql
+
 **2. Contingut del fitxer**
 ```sql
    USE videoclub;
